@@ -13,6 +13,7 @@
     "config": "^1.24.0",
     "connect": "^3.5.0",
     "connect-ioredis": "^1.4.5",
+    "connect-redis": "^3.1.0",
     "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
     "express-session": "^1.14.2",
