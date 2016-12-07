@@ -4,9 +4,10 @@ const bodyParser = require('body-parser')
 const passport = require('passport')
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const session = require('express-session')
+const redis = require('redis')
 const RedisStore = require('connect-redis')(session);
 const connect = require('connect');
-
+const acl = require('acl');
 const config = require('config')
 const app = express()
 
@@ -15,6 +16,15 @@ const RedisPort = config.get('redis.port');
 const GoogleClientId = config.get('auth.google_client_id');
 const GoogleSecret = config.get('auth.google_secret');
 const GoogleCallbackUrl = config.get('auth.google_callback_url');
+const AclPrefix = config.get('acl.prefix');
+
+acl = new acl(
+    new acl.redisBackend(
+	redis.createClient(
+	    RedisPort,
+	    RedisHost),
+	AclPrefix
+    ));
 
 passport.use(
     new GoogleStrategy(
@@ -24,10 +34,12 @@ passport.use(
 	    callbackURL: GoogleCallbackUrl
 	},
 	function(accessToken, refreshToken, profile, done) {
-	    User.findOrCreate({ googleId: profile.id }, function (err, user) {
-		return done(err, user);
-	    });
-
+	    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
+	    console.log("ID      " + profile.id)
+	    console.log("Profile " + profile.displayName)
+	    console.log("email   " + profile.emails[0].value)
+	    
+	    done(null, profile);
 	}
     )
 );
@@ -62,7 +74,10 @@ app.get('/login', function (req, res) {
 
 // GET /auth/google
 app.get('/auth/google',
-  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
+	passport.authenticate('google', {
+	    scope: ['https://www.googleapis.com/auth/plus.login',
+		    'https://www.googleapis.com/auth/userinfo.email']
+	}));
 
 // GET /auth/google/callback
 app.get('/auth/google/callback', 
