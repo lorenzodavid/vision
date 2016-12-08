@@ -6,7 +6,7 @@ import Carousel from 'nuka-carousel';
 import { Modal } from './Modal';
 import reactMixin from 'react-mixin';
 
-class Timer extends React.Component {
+class Profile extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -23,7 +23,7 @@ class Timer extends React.Component {
   }
   componentWillMount () {
     this.setState({
-      hasPictureModal: true
+      hasPictureModal: false
     });
   }
   componentDidMount () {
@@ -67,6 +67,14 @@ class Timer extends React.Component {
         )
       }));
   }
+  onCustomNextClick () {
+    this.state.carousels.carousel.nextSlide();
+  }
+
+  onCustomPreviousClick () {
+    this.state.carousels.carousel.nextSlide();
+  }
+
   render () {
     let imageSources = [
       'http://i.imgur.com/wsPDfYW.jpg',
@@ -102,9 +110,97 @@ class Timer extends React.Component {
     });
 
     let carouseElements = images.concat(videos);
+    let decorators =
+      [
+        {
+          component: React.createClass(
+            {
+              displayName: 'PreviousSlideButton',
+              render () {
+                return (
+                  <button
+                  onClick={this.props.previousSlide}>
+                  Previous Slide
+                  </button>
+                );
+              }
+            }
+          ),
+          position: 'CenterLeft',
+          style: {
+            padding: 0
+          }
+        },
+        {
+          component: React.createClass(
+            {
+              displayName: 'NextSlideButton',
+              render () {
+                return (
+                  <button
+                  onClick={this.props.nextSlide}>
+                  next Slide
+                  </button>
+                );
+              }
+            }
+          ),
+          position: 'CenterRight',
+          style: {
+            padding: 0
+          }
+        },
+        {
+          component: React.createClass({
+            displayName: 'bottomNav',
+            render () {
+              let bottomNavStyle = {
+              };
+              let dots = [];
+              let buttonStyle = {
+                display: 'inline-block',
+                width: '7px',
+                height: '7px',
+                borderRadius: '100%',
+                background: 'black',
+                boxShadow: 'white 0 0 3px'
+              };
+              dots = carouseElements.map((elt, i) => {
+                let fn = () => {
+                  this.props.goToSlide(i);
+                };
+                let enabled = (
+                  <button onClick={fn} key={i}>
+                    <div style={buttonStyle}>
+                    </div>
+                  </button>
+                );
+                let disabled = (
+                  <button onClick={fn} disabled key={i}>
+                    <div style={buttonStyle}>
+                    </div>
+                  </button>
+                );
+                return this.props.currentSlide === i ? disabled : enabled;
+              });
+
+              return (
+                <div style={bottomNavStyle}>
+                  {dots}
+                </div>
+              );
+            }
+          }),
+          position: 'BottomCenter',
+          style: {
+            padding: 0
+          }
+        }
+      ];
 
     return (
       <div>
+        <input type="text" />
         <Modal isOpen={this.state.hasPictureModal} onClick={this.onModalClick.bind(this)}>
           {this.state.modalChildren}
         </Modal>
@@ -113,15 +209,18 @@ class Timer extends React.Component {
         </div>
         <div style={containerStyle}>
           <Carousel
+            decorators={decorators}
             ref="carousel"
             data={this.mixins[0].setCarouselData.bind(this, 'carousel')}
-            wrapAround={false}
+            wrapAround={true}
           >
             {carouseElements}
           </Carousel>
-
-          {this.state.carousels.carousel ? <button type="button" onClick={this.state.carousels.carousel.goToSlide.bind(null, 2)}>
-            Go to slide 5
+          {this.state.carousels.carousel ? <button type="button" onClick={this.onCustomPreviousClick.bind(this)}>
+          previous
+          </button> : null}
+          {this.state.carousels.carousel ? <button type="button" onClick={this.onCustomNextClick.bind(this)}>
+            Next
           </button> : null}
         </div>
       </div>
@@ -129,5 +228,5 @@ class Timer extends React.Component {
   }
 }
 
-reactMixin(Timer, Carousel.ControllerMixin);
-render(<Timer/>, document.getElementById('main'));
+reactMixin(Profile, Carousel.ControllerMixin);
+render(<Profile/>, document.getElementById('main'));
