@@ -4,16 +4,13 @@ import { render } from 'react-dom';
 import { SliderImage } from './SliderImage';
 import Carousel from 'nuka-carousel';
 import { Modal } from './Modal';
-import reactMixin from 'react-mixin';
 
 class Profile extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      carousels: {},
       secondsElapsed: 0
     };
-    this.mixins = [Carousel.ControllerMixin];
   }
   tick () {
     this.setState((prevState) => ({
@@ -210,23 +207,13 @@ class Profile extends React.Component {
         <div style={containerStyle}>
           <Carousel
             decorators={decorators}
-            ref="carousel"
-            data={this.mixins[0].setCarouselData.bind(this, 'carousel')}
             wrapAround={true}
           >
             {carouseElements}
           </Carousel>
-          {this.state.carousels.carousel ? <button type="button" onClick={this.onCustomPreviousClick.bind(this)}>
-          previous
-          </button> : null}
-          {this.state.carousels.carousel ? <button type="button" onClick={this.onCustomNextClick.bind(this)}>
-            Next
-          </button> : null}
         </div>
       </div>
     );
   }
 }
-
-reactMixin(Profile, Carousel.ControllerMixin);
 render(<Profile/>, document.getElementById('main'));
