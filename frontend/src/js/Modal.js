@@ -29,6 +29,5 @@ export class Modal extends React.Component {
 }
 Modal.propTypes = {
   isOpen: React.PropTypes.bool.isRequired,
-  onClick: React.PropTypes.optionalFunc,
-  children: React.PropTypes.optionalElement
+  onClick: React.PropTypes.func
 };

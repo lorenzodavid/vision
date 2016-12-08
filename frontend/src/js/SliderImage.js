@@ -6,14 +6,25 @@ export class SliderImage extends React.Component {
     }
   }
   render () {
+    const imageStyle = Object.assign(
+      {
+        backgroundImage: 'url("' + this.props.src + '")',
+        backgroundPosition: 'center',
+        backgroundSize: 'contain',
+        backgroundRepeat: 'no-repeat'
+      },
+      this.props.style);
+
     return (
-      <div onClick={this.onClick.bind(this)}>
-      <img src={this.props.src}/>
+      <div
+        onClick={this.onClick.bind(this)}
+        style={imageStyle}
+      >
       </div>
     );
   }
 }
 SliderImage.propTypes = {
   src: React.PropTypes.string.isRequired,
-  onClick: React.PropTypes.optionalFunc
+  onClick: React.PropTypes.func
 };

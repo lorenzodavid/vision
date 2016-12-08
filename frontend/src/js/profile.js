@@ -1,20 +1,19 @@
 /*global setInterval:false, clearInterval:false*/
 import React from 'react';
 import { render } from 'react-dom';
-// import Slider from 'react-slick';
 import { SliderImage } from './SliderImage';
-// var Carousel = require('nuka-carousel');
 import Carousel from 'nuka-carousel';
 import { Modal } from './Modal';
+import reactMixin from 'react-mixin';
 
 class Timer extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
+      carousels: {},
       secondsElapsed: 0
     };
     this.mixins = [Carousel.ControllerMixin];
-
   }
   tick () {
     this.setState((prevState) => ({
@@ -44,6 +43,19 @@ class Timer extends React.Component {
         modalChildren: this.state.hasPictureModal ? [] : this.state.modalChildren
       }));
   }
+  onVideoClick (event) {
+    let video = event.target;
+    this.setState(Object.assign(
+      {},
+      this.state,
+      {
+        hasPictureModal: true,
+        modalChildren: (
+          <video src={video.src} autoPlay={true}/>
+        )
+      }
+    ));
+  }
   onImageClick (imageSource) {
     this.setState(Object.assign(
       {},
@@ -64,12 +76,32 @@ class Timer extends React.Component {
     let videoSources = [
       'http://i.imgur.com/PeBXeQg.mp4'
     ];
-    let images = imageSources.map((src, i) => <SliderImage key={i} src={src} onClick={this.onImageClick.bind(this)}/>);
-    let videos = videoSources.map((src, i) => <video key={i + images.length}src={src}/>);
     let containerWidth = 400;
+    let containerHeight = 400;
     const containerStyle = {
-      width: containerWidth + 'px'
+      width: containerWidth + 'px',
+      height: containerHeight + 'px'
     };
+    const elementStyle = containerStyle;
+    let images = imageSources.map(
+      (src, i) => {
+        return (<SliderImage
+          key={i}
+          src={src}
+          onClick={this.onImageClick.bind(this)}
+          style={elementStyle}
+        />);
+      });
+    let videos = videoSources.map((src, i) => {
+      return (<video
+        key={i + images.length}
+        src={src}
+        onClick={this.onVideoClick.bind(this)}
+        style={elementStyle}
+      />);
+    });
+
+    let carouseElements = images.concat(videos);
 
     return (
       <div>
@@ -80,13 +112,22 @@ class Timer extends React.Component {
           {this.state.secondsElapsed}
         </div>
         <div style={containerStyle}>
-          <Carousel wrapAround={false}>
-            {images}
-            {videos}
+          <Carousel
+            ref="carousel"
+            data={this.mixins[0].setCarouselData.bind(this, 'carousel')}
+            wrapAround={false}
+          >
+            {carouseElements}
           </Carousel>
+
+          {this.state.carousels.carousel ? <button type="button" onClick={this.state.carousels.carousel.goToSlide.bind(null, 2)}>
+            Go to slide 5
+          </button> : null}
         </div>
       </div>
     );
   }
 }
+
+reactMixin(Timer, Carousel.ControllerMixin);
 render(<Timer/>, document.getElementById('main'));
