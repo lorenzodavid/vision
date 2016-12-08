@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "acl": "^0.4.9",
     "body-parser": "^1.15.2",
     "config": "^1.24.0",
     "connect": "^3.5.0",
@@ -19,7 +20,11 @@
     "express-session": "^1.14.2",
     "ioredis": "^2.4.2",
     "passport": "^0.3.2",
-    "passport-local": "^1.0.0"
+    "passport-google-oauth": "^1.0.0",
+    "passport-local": "^1.0.0",
+    "redis": "^2.6.3",
+    "swagger": "^0.7.5",
+    "swagger-express-mw": "^0.7.0"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",

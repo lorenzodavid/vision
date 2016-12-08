@@ -2,5 +2,13 @@
     "redis": {
 	"host": "localhost",
 	"port": "6379"
+    },
+    "auth": {
+	"google_client_id": "828699221164-a4rqjjs4560n1difg9ihjcf8skhg973d.apps.googleusercontent.com",
+	"google_secret": "RmX3aQ01QHnngl6V1u7RL2Zl",
+	"google_callback_url": "http://localhost:3000/auth/google/callback"
+    },
+    "acl": {
+	"prefix": "user"
     }
 }
