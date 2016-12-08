@@ -1,0 +1,6 @@
+.tmp
+.DS_Store
+*~
+frontend/public/*
+ dump.rdb
+node_modules/*
