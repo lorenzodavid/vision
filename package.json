@@ -13,8 +13,8 @@
     "body-parser": "^1.15.2",
     "config": "^1.24.0",
     "connect": "^3.5.0",
-    "connect-redis": "^3.1.0",
     "connect-ioredis": "^1.4.5",
+    "connect-redis": "^3.1.0",
     "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
     "express-session": "^1.14.2",
@@ -22,6 +22,8 @@
     "passport": "^0.3.2",
     "passport-google-oauth": "^1.0.0",
     "passport-local": "^1.0.0",
-    "redis": "^2.6.3"
+    "redis": "^2.6.3",
+    "swagger": "^0.7.5",
+    "swagger-express-mw": "^0.7.0"
   }
 }

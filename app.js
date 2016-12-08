@@ -9,6 +9,7 @@ const RedisStore = require('connect-redis')(session);
 const connect = require('connect');
 const acl = require('acl');
 const config = require('config')
+const SwaggerExpress = require('swagger-express-mw');
 const app = express()
 
 const RedisHost = config.get('redis.host');
@@ -38,7 +39,7 @@ passport.use(
 	    console.log("ID      " + profile.id)
 	    console.log("Profile " + profile.displayName)
 	    console.log("email   " + profile.emails[0].value)
-	    
+
 	    done(null, profile);
 	}
     )
@@ -80,7 +81,7 @@ app.get('/auth/google',
 	}));
 
 // GET /auth/google/callback
-app.get('/auth/google/callback', 
+app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
     res.redirect('/');
@@ -91,6 +92,24 @@ app.post('/login',
 			       { successRedirect: '/',
                                  failureRedirect: '/auth/google' }))
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!')
-})
+// app.listen(3000, function () {
+//   console.log('Example app listening on port 3000!')
+// }
+
+var SwaggerConfig = {
+  appRoot: __dirname // required config
+};
+
+SwaggerExpress.create(SwaggerConfig, function(err, swaggerExpress) {
+  if (err) { throw err; }
+
+  // install middleware
+  swaggerExpress.register(app);
+
+  var port = process.env.PORT || 3000;
+  app.listen(port);
+
+  if (swaggerExpress.runner.swagger.paths['/hello']) {
+    console.log('try this:\ncurl http://127.0.0.1:' + port + '/hello?name=Scott');
+  }
+});
