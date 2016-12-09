@@ -53,7 +53,8 @@ module.exports = (grunt) => {
         [
           './frontend/src/css/**/*.css',
           './frontend/src/css/**/*.tff',
-          './frontend/src/css/**/*.woff'
+          './frontend/src/css/**/*.woff',
+          './frontend/src/css/img/**/*'
         ],
         tasks: ['copy:css']
       },

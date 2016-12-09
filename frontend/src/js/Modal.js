@@ -11,14 +11,17 @@ export class Modal extends React.Component {
   }
   render () {
     const modalStyle = {
-      display: this.props.isOpen ? 'block' : 'none',
+      display: this.props.isOpen ? 'flex' : 'none',
       position: 'fixed',
       top: 0,
       right: 0,
       bottom: 0,
       left: 0,
       background: 'rgba(51,51,51,0.4)',
-      zIndex: 99999
+      zIndex: 99999,
+      alignItems: 'center',
+      justifyContent: 'center',
+      overflow: 'hidden'
     };
     return (
       <div style={modalStyle} onClick={this.onModalElementClick.bind(this)}>
