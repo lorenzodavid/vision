@@ -5,7 +5,6 @@ import { SliderImage } from './SliderImage';
 import Carousel from 'nuka-carousel';
 import { Modal } from './Modal';
 import { Header } from './Header';
-import Measure from 'react-measure';
 
 class Profile extends React.Component {
   constructor (props) {
