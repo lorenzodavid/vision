@@ -7,7 +7,6 @@ const session = require('express-session')
 const redis = require('redis')
 const RedisStore = require('connect-redis')(session);
 const connect = require('connect');
-const acl = require('acl');
 const config = require('config')
 const SwaggerExpress = require('swagger-express-mw');
 const app = express()
@@ -17,15 +16,6 @@ const RedisPort = config.get('redis.port');
 const GoogleClientId = config.get('auth.google_client_id');
 const GoogleSecret = config.get('auth.google_secret');
 const GoogleCallbackUrl = config.get('auth.google_callback_url');
-const AclPrefix = config.get('acl.prefix');
-
-acl = new acl(
-    new acl.redisBackend(
-	redis.createClient(
-	    RedisPort,
-	    RedisHost),
-	AclPrefix
-    ));
 
 passport.use(
     new GoogleStrategy(
