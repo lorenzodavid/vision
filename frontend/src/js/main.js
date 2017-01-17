@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, Link, browserHistory, IndexRoute } from 'react-router'
 
-//import { Login } from './login';
+import { Talent, Talents } from './talents';
+import { Client, Clients } from './clients';
 
 class App extends React.Component {
     render() {
@@ -12,8 +13,9 @@ class App extends React.Component {
                     <Link to='/home'><li>Home</li></Link>
                     <Link to='/about'><li>About</li></Link>
                     <Link to='/contact'><li>Contact</li></Link>
+                    <Link to='talents'><li>Talents</li></Link>
+                    <Link to='clients'><li>Clients</li></Link>
                     <a href='../login.html'><li>Login</li></a>
-                    <a href='../talents.html'><li>Talents</li></a>
                 </ul>
 
                 {this.props.children}
@@ -67,6 +69,11 @@ ReactDOM.render((
             <Route path="home" component={Home} />
             <Route path="about" component={About} />
             <Route path="contact" component={Contact} />
+            <Route path="talents" component={Talents}>
+                
+            </Route>
+            <Route path="/talents/:talentId" component={Talent} />
+            <Route path="clients" component={Clients} />
         </Route>
     </Router>
 

@@ -7,7 +7,7 @@ import Carousel from 'nuka-carousel';
 import { Modal } from './Modal';
 import { Header } from './Header';
 
-export class Talent extends React.Component {
+export class Client extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -274,39 +274,38 @@ export class Talent extends React.Component {
 }
 //render(<Profile/>, document.getElementById('main'));
 
-export class Talents extends React.Component {
+export class Clients extends React.Component {
   render() {
-    let talentsArray = [];
-    for (let key in this.state.talents) {
-      talentsArray.push({
+    let clientsArray = [];
+    for (let key in this.state.clients) {
+      clientsArray.push({
         id: key,
-        value: this.state.talents[key]
+        value: this.state.clients[key]
       });
     }
-    let talents = talentsArray.map(talent => (
-      <li key={talent.id}><Link to={`/talents/${talent.id}`}>{talent.value.fname}</Link></li>
+    let clients = clientsArray.map(client => (
+      <li key={client.id}><Link to={`/client/${client.id}`}>{client.value.email}</Link></li>
     ));
     return (
       <div>
-        <h1>Talents</h1>
-        {talents}
+        <h1>Clients</h1>
+        {clients}
       </div>
     );
+
   }
   constructor(props) {
     super(props);
     let me = this;
     this.state = {
-      talents: {}
+      clients: {}
     }
-    var talentRef = firebase.database().ref("talents");
-    //TODO have a single file for all this stuff (clients/talents)
-    //TODO fix the bug Can only update a mounted or mounting component. This usually means you called setState() on an unmounted component. This is a no-op. Please check the code for the Clients component.
+    var clientRef = firebase.database().ref("users");
     //TODO do it on child delete
-    talentRef.on("child_added", function (snapshot) {
+    clientRef.on("child_added", function (snapshot) {
       me.setState({
-        talents: {
-          ...me.state.talents, 
+        clients: {
+          ...me.state.clients, 
           [snapshot.key]: snapshot.val()
         }
       })
@@ -316,9 +315,9 @@ export class Talents extends React.Component {
 
 // ReactDOM.render((
 //   <Router history={browserHistory}>
-//     <Route path="/" component={Talents}>
-//       <IndexRoute component={Talents} />
-//       <Route path="talents.html" component={Talents}>
+//     <Route path="/" component={Clients}>
+//       <IndexRoute component={Clients} />
+//       <Route path="clients.html" component={Clients}>
 //       </Route>
 //     </Route>
 //   </Router>
