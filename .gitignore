@@ -4,3 +4,4 @@
 frontend/public/*
  dump.rdb
 node_modules/*
+firebase-debug.log

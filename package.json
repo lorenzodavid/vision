@@ -8,24 +8,6 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "acl": "^0.4.9",
-    "body-parser": "^1.15.2",
-    "config": "^1.24.0",
-    "connect": "^3.5.0",
-    "connect-ioredis": "^1.4.5",
-    "connect-redis": "^3.1.0",
-    "cookie-parser": "^1.4.3",
-    "express": "^4.14.0",
-    "express-session": "^1.14.2",
-    "ioredis": "^2.4.2",
-    "passport": "^0.3.2",
-    "passport-google-oauth": "^1.0.0",
-    "passport-local": "^1.0.0",
-    "redis": "^2.6.3",
-    "swagger": "^0.7.5",
-    "swagger-express-mw": "^0.7.0"
-  },
   "devDependencies": {
     "babel-core": "^6.17.0",
     "babel-eslint": "^7.1.0",
@@ -42,12 +24,15 @@
     "grunt-browserify": "^5.0.0",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
     "grunt-webpack": "^1.0.18",
     "load-grunt-tasks": "^3.5.2",
     "nuka-carousel": "^2.0.3",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-redux": "^4.4.5",
-    "webpack": "^1.13.2"
+    "react-router": "^3.0.1",
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.16.2"
   }
 }

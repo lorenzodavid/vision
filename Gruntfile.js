@@ -25,7 +25,8 @@ module.exports = (grunt) => {
             ]]
         },
         files: {
-          './frontend/public/js/profile.js': './frontend/src/js/profile.js'
+          './frontend/public/js/main.js': './frontend/src/js/main.js',
+          './frontend/public/js/talents.js': './frontend/src/js/talents.js'
         }
       }
     },
@@ -40,9 +41,9 @@ module.exports = (grunt) => {
         files: [
           {
             expand: true,
-            cwd: './frontend/src/templates',
-            src: ['**'],
-            dest: './frontend/public/templates/'
+            cwd: './frontend/src/',
+            src: ['**.html'],
+            dest: './frontend/public/'
           }
         ]
       }
@@ -66,7 +67,7 @@ module.exports = (grunt) => {
         }
       },
       html: {
-        files: ['./frontend/src/templates/**/*.html'],
+        files: ['./frontend/src/**/*.html'],
         tasks: ['copy:html'],
         options: {
           spawn: false

@@ -1,0 +1,54 @@
+<div>
+    <form id="loginForm">
+        <div className="container">
+            <label><b>Username</b></label>
+            <input id="username" type="text" placeholder="Enter Username" name="uname" required />
+
+            <label><b>Password</b></label>
+            <input id="password" type="password" placeholder="Enter Password" name="psw" required />
+
+            <button type="submit">Login</button>
+            <input type="checkbox" checked="checked" />
+            <div>Remember me</div>
+        </div>
+
+        <div className="container" style="background-color:#f1f1f1">
+<button type="button" class="cancelbtn">Cancel</button>
+<span class="psw">Forgot <a href="#">password?</a></span>
+</div>
+</form>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/3.6.5/firebase.js"></script>
+
+<script>
+    var config = {
+        apiKey: "AIzaSyAAf0EuhOccgdnq8t0140bxCL2YNtQkVGY",
+        authDomain: "vision-151722.firebaseapp.com",
+        databaseURL: "https://vision-151722.firebaseio.com",
+        storageBucket: "vision-151722.appspot.com",
+        messagingSenderId: "828699221164"
+    };
+    firebase.initializeApp(config);
+
+    loginForm.addEventListener('submit', function (ev) {
+        console.log(ev);
+        ev.preventDefault();
+
+        firebase.auth().signInWithEmailAndPassword(username.value, password.value).then(() => {
+            var user = firebase.auth().currentUser;
+            if (user) {
+                // User is signed in.
+                console.log('yeah');
+            }
+        })
+            .catch(function (error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // ...
+                console.log('FAIL');
+            });
+    });
+</script>
+
