@@ -1,6 +1,9 @@
 {
   "rules": {
-    ".read": "auth != null",
-    ".write": "auth != null"
+    "talents" : {
+      "$tid" : {
+      	".read" : "root.child('talents').child($tid).child('groups').hasChildren([root.child('users').child(auth.uid).child('group').val()])"
+      }
+    }
   }
 }
