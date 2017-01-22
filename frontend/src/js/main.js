@@ -1,23 +1,36 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, Link, browserHistory, IndexRoute } from 'react-router'
+import { MenuItem, Nav, Navbar, NavbarHeader, NavItem, NavDropdown} from 'react-bootstrap'
 
 import { Talent, Talents } from './talents';
 import { Client, Clients } from './clients';
 
 class App extends React.Component {
     render() {
+        const navbarInstance = (
+            <Navbar inverse collapseOnSelect className="navbar-static-top">
+                <Navbar.Header>
+                    <Navbar.Brand>
+                        <Link to='/'>Foresight</Link>
+                    </Navbar.Brand>
+                    <Navbar.Toggle />
+                </Navbar.Header>
+                <Navbar.Collapse>
+                    <Nav>
+                        <li><Link to='/contact'>Contact</Link></li>
+                        <li><Link to='/talents'>Talents</Link></li>
+                        <li><Link to='/clients'>Clients</Link></li>
+                    </Nav>
+                    <Nav pullRight>
+                        <NavItem href="../login">Login</NavItem>
+                    </Nav>
+                </Navbar.Collapse>
+            </Navbar>
+        );
         return (
-            <div>
-                <ul>
-                    <Link to='/home'><li>Home</li></Link>
-                    <Link to='/about'><li>About</li></Link>
-                    <Link to='/contact'><li>Contact</li></Link>
-                    <Link to='talents'><li>Talents</li></Link>
-                    <Link to='clients'><li>Clients</li></Link>
-                    <a href='../login.html'><li>Login</li></a>
-                </ul>
-
+            <div className="container-fluid">
+                {navbarInstance}
                 {this.props.children}
             </div>
         )
@@ -66,14 +79,10 @@ ReactDOM.render((
     <Router history={browserHistory}>
         <Route path="/" component={App}>
             <IndexRoute component={Home} />
-            <Route path="home" component={Home} />
-            <Route path="about" component={About} />
-            <Route path="contact" component={Contact} />
-            <Route path="talents" component={Talents}>
-                
-            </Route>
+            <Route path="/contact" component={Contact} />
+            <Route path="/talents" component={Talents} />
             <Route path="/talents/:talentId" component={Talent} />
-            <Route path="clients" component={Clients} />
+            <Route path="/clients" component={Clients} />
         </Route>
     </Router>
 
