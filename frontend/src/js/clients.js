@@ -292,33 +292,34 @@ export class Clients extends React.Component {
         {clients}
       </div>
     );
-
   }
-  constructor(props) {
-    super(props);
+  componentWillMount () {
     let me = this;
-    this.state = {
-      clients: {}
-    }
     var clientRef = firebase.database().ref("users");
     //TODO do it on child delete
+    clientRef.once('value').then((snapshot) => {
+      me.setState({
+        ...me.state,
+        clients: {
+          ...me.state.clients,
+          ...snapshot.val()
+        }
+      });
+    });
     clientRef.on("child_added", function (snapshot) {
       me.setState({
+        ...me.state,
         clients: {
           ...me.state.clients, 
           [snapshot.key]: snapshot.val()
         }
-      })
-    })
+      });
+    });
+  }
+  constructor(props) {
+    super(props);
+    this.state = {
+      clients: {}
+    };
   }
 }
-
-// ReactDOM.render((
-//   <Router history={browserHistory}>
-//     <Route path="/" component={Clients}>
-//       <IndexRoute component={Clients} />
-//       <Route path="clients.html" component={Clients}>
-//       </Route>
-//     </Route>
-//   </Router>
-//   ), document.getElementById('main'))

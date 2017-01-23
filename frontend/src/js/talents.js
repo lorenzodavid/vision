@@ -8,8 +8,9 @@ import { Modal } from './Modal';
 import { Header } from './Header';
 
 export class Talent extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
+    console.log(props);
     this.state = {
       windowWidth: window.innerWidth,
       windowHeight: window.innerHeight,
@@ -290,36 +291,30 @@ export class Talents extends React.Component {
       <div>
         <h1>Talents</h1>
         {talents}
+        <Link to="talents/adbe/">abde</Link>
       </div>
     );
   }
+  componentWillMount () {
+    let me = this;
+    let talentRef = firebase.database().ref('talents');
+    talentRef.once('value').then((snapshot) => {
+      me.setState({
+        ...me.state,
+        talents: me.state.talents.concat.apply(snapshot.val())
+      });
+    });
+    talentRef.on('child_added', (snapshot) => {
+      me.setState({
+        ...me.state,
+        talents: me.state.talents.concat(snapshot.val())
+      });
+    });
+  }
   constructor(props) {
     super(props);
-    let me = this;
     this.state = {
-      talents: {}
-    }
-    var talentRef = firebase.database().ref("talents");
-    //TODO have a single file for all this stuff (clients/talents)
-    //TODO fix the bug Can only update a mounted or mounting component. This usually means you called setState() on an unmounted component. This is a no-op. Please check the code for the Clients component.
-    //TODO do it on child delete
-    talentRef.on("child_added", function (snapshot) {
-      me.setState({
-        talents: {
-          ...me.state.talents, 
-          [snapshot.key]: snapshot.val()
-        }
-      })
-    })
+      talents: []
+    };
   }
 }
-
-// ReactDOM.render((
-//   <Router history={browserHistory}>
-//     <Route path="/" component={Talents}>
-//       <IndexRoute component={Talents} />
-//       <Route path="talents.html" component={Talents}>
-//       </Route>
-//     </Route>
-//   </Router>
-//   ), document.getElementById('main'))

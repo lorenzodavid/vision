@@ -25,8 +25,7 @@ module.exports = (grunt) => {
             ]]
         },
         files: {
-          './frontend/public/js/main.js': './frontend/src/js/main.js',
-          './frontend/public/js/talents.js': './frontend/src/js/talents.js'
+          './frontend/public/js/main.js': './frontend/src/js/main.js'
         }
       }
     },
@@ -59,13 +58,13 @@ module.exports = (grunt) => {
         ],
         tasks: ['copy:css']
       },
-      js: {
-        files: ['./frontend/src/js/**/*.js'],
-        tasks: ['browserify'],
-        options: {
-          spawn: false
-        }
-      },
+      // js: {
+      //   files: ['./frontend/src/js/**/*.js'],
+      //   tasks: ['browserify'],
+      //   options: {
+      //     spawn: false
+      //   }
+      // },
       html: {
         files: ['./frontend/src/**/*.html'],
         tasks: ['copy:html'],
