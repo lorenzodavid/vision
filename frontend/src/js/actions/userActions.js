@@ -1,4 +1,6 @@
 /* global firebase, console*/
+import { browserHistory } from 'react-router';
+
 export const getCurrentUser = () => {
   return (dispatch) => {
     let user = firebase.auth().currentUser;
@@ -8,6 +10,28 @@ export const getCurrentUser = () => {
     });
   };
 };
+
+export const logout = () => {
+  return (dispatch) => {
+    firebase.auth().signOut().then(
+      () => {
+        dispatch({
+          type: 'LOGOUT',
+          payload: null
+        });
+        // remove all firebase local db and all in memory store
+        location.href = '/';
+      },
+      (error) => {
+        dispatch({
+          type: 'LOGOUT_FAIL',
+          payload: error
+        });
+      }
+    );
+  };
+};
+
 export const loginUserAction = (username, password) => {
   return (dispatch) => {
     firebase.auth().signInWithEmailAndPassword(username, password).then(() => {
@@ -24,6 +48,12 @@ export const loginUserAction = (username, password) => {
       let errorCode = error.code;
       let errorMessage = error.message;
       console.log('FAIL' + errorCode + ' ' + errorMessage);
+      dispatch({
+        type: 'LOGIN_FAIL',
+        payload: {
+          error
+        }
+      });
     });
   };
 };

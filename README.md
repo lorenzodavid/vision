@@ -10,5 +10,5 @@ grunt frontend
 #watch html css 
 grunt watch
 #watch js
-webpack --watch
+./node_modules/webpack/bin/webpack.js --watch
 ```

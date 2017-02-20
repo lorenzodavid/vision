@@ -1,7 +1,24 @@
 /*global firebase*/
 import React from 'react';
-import userActions from './actions/userActions';
+import * as userActions from './actions/userActions';
+import { connect } from 'react-redux';
+import { browserHistory } from 'react-router'
+import styles from '../css/login.css';
+import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 
+function FieldGroup({ id, label, help, ...props }) {
+  return (
+    <FormGroup controlId={id}>
+      <ControlLabel>{label}</ControlLabel>
+      <FormControl {...props} />
+      {help && <HelpBlock>{help}</HelpBlock>}
+    </FormGroup>
+  );
+}
+
+@connect((store) => {
+  return store;
+})
 export class Login extends React.Component {
   constructor (props) {
     super(props);
@@ -13,7 +30,7 @@ export class Login extends React.Component {
   }
   onSubmit (e) {
     e.preventDefault();
-    userActions.loginUserAction(this.state.username, this.state.password);
+    this.props.dispatch(userActions.loginUserAction(this.state.username, this.state.password));
   }
   onUsernameChange (e) {
     this.setState({
@@ -34,47 +51,48 @@ export class Login extends React.Component {
     });
   }
   render () {
+    if (this.props.user.user) {
+      if (this.props.user.redirectUrl) {
+        const redirectUrl = this.props.user.redirectUrl;
+        this.props.dispatch({
+          type: 'SET_USER_REDIRECT',
+          payload: null
+        });
+        browserHistory.replace(redirectUrl);
+      } else {
+        browserHistory.push('/');
+      }
+    }
     return (
-      <div>
-        <div>
-          <form id="loginForm" onSubmit={this.onSubmit.bind(this)}>
-            <div className="container">
-              <label><b>Username</b></label>
-              <input
-                id="username"
-                type="text"
-                placeholder="Enter Username"
-                name="uname"
-                required
-                value={this.state.username}
-                onChange={this.onUsernameChange.bind(this)}/>
-
-              <label><b>Password</b></label>
-              <input
-                  id="password"
-                  type="password"
-                  placeholder="Enter Password"
-                  name="psw"
-                  required
-                  value={this.state.password}
-                  onChange={this.onPasswordChange.bind(this)}/>
-
-
-              <button type="submit">Login</button>
-              <input
-                type="checkbox"
-                checked={this.state.rememberMe}
-                onChange={this.onRememberMeChange.bind(this)}
-              />
-              <div>Remember me</div>
+      <div className={styles.page}>
+        <form id="loginForm" className={ styles.form }onSubmit={this.onSubmit.bind(this)}>
+          <div className={styles.container}>
+             <FieldGroup
+              id="username"
+              label="Username"
+              type="text"
+              name="uname"
+              required
+              placeholder="Enter Username"
+              onChange={this.onUsernameChange.bind(this)}
+              value={this.state.username}
+            />
+            <FieldGroup
+              id="password"
+              type="password"
+              label="Password"
+              placeholder="Enter Password"
+              name="psw"
+              required
+              value={this.state.password}
+              onChange={this.onPasswordChange.bind(this)}
+            />
+            <Button type="submit">Login</Button>
+            <div>
+              {this.props.user.loginError.errorMessage}
             </div>
-
-            <div className="container" style={{backgroundColor: '#f1f1f1'}}>
-              <button type="button" className="cancelbtn">Cancel</button>
-              <span className="psw">Forgot <a href="#">password?</a></span>
-            </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     );
   }

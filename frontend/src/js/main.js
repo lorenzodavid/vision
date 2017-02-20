@@ -2,7 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, Link, browserHistory, IndexRoute } from 'react-router'
-import { MenuItem, Nav, Navbar, NavbarHeader, NavItem, NavDropdown } from 'react-bootstrap'
+import { MenuItem, Nav, Navbar, NavbarHeader, NavItem, NavDropdown, Button } from 'react-bootstrap'
 import { Provider, connect } from 'react-redux';
 
 import { subscribeUsers } from './actions/talentActions';
@@ -13,8 +13,29 @@ import { Client, Clients } from './clients';
 import { Login } from './Login';
 import * as userActions from './actions/userActions';
 
+@connect((store) => {
+  return store;
+})
 class App extends React.Component {
+  logout () {
+    this.props.dispatch(userActions.logout());
+  }
+  constructor (props) {
+    super(props);
+    this.logout = this.logout.bind(this);
+  }
   render() {
+
+    const centerLinks = (
+      <Nav>
+        <li><Link to='/contact'>Contact</Link></li>
+        <li><Link to='/talents'>Talents</Link></li>
+        <li><Link to='/clients'>Clients</Link></li>
+      </Nav>
+    );
+    const rightLink = (
+        <Link to='/login'><li>Login</li></Link>
+    );
     const navbarInstance = (
       <Navbar inverse collapseOnSelect className="navbar-static-top">
         <Navbar.Header>
@@ -24,14 +45,10 @@ class App extends React.Component {
           <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse>
-          <Nav>
-            <li><Link to='/contact'>Contact</Link></li>
-            <li><Link to='/talents'>Talents</Link></li>
-            <li><Link to='/clients'>Clients</Link></li>
-          </Nav>
+          { this.props.user.user ? centerLinks : null }
           <Nav pullRight>
             <li>
-              <Link to='/login'><li>Login</li></Link>
+              { !this.props.user.user ? rightLink : <a bsStyle="link" onClick={this.logout} >logout {this.props.user.user.email}</a>}
             </li>
           </Nav>
         </Navbar.Collapse>
@@ -83,6 +100,9 @@ class AppContainer extends React.Component {
     firebase.initializeApp(config);
   }
   componentWillMount() {
+    firebase.auth().onAuthStateChanged((user) => {
+      this.props.dispatch(userActions.getCurrentUser());
+    });
     this.props.dispatch(userActions.getCurrentUser());
   }
   render() {
@@ -93,17 +113,29 @@ class AppContainer extends React.Component {
     );
   }
 }
+
+const requireAuth = (nextState, replace) => {
+  if (!store.getState().user.user) {
+    store.dispatch({type: 'SET_USER_REDIRECT', payload: nextState.location.pathname});
+    replace({
+      pathname: '/login',
+      state: {
+        nextPathname: nextState.location.pathname
+      }
+    });
+  }
+};
 ReactDOM.render((
   <Provider store={store}>
     <AppContainer>
       <Router history={browserHistory}>
         <Route path="/" component={App}>
           <IndexRoute component={Home} />
-          <Route path="/contact" component={Contact} />
-          <Route path="/talents" component={Talents} />
-          <Route path="/talents/:talentId" component={Talent} />
-          <Route path="/clients" component={Clients} />
           <Route path="/login" component={Login} />
+          <Route onEnter={ requireAuth } path="/contact" component={Contact} />
+          <Route onEnter={ requireAuth } path="/talents" component={Talents} />
+          <Route onEnter={ requireAuth } path="/talents/:talentId" component={Talent} />
+          <Route onEnter={ requireAuth } path="/clients" component={Clients} />
         </Route>
       </Router>
     </AppContainer>

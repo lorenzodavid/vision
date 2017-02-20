@@ -6,10 +6,16 @@ import { SliderImage } from './SliderImage';
 import Carousel from 'nuka-carousel';
 import { Modal } from './Modal';
 import { Header } from './Header';
+import * as talentActions from './actions/talentActions';
+import { connect } from 'react-redux';
 
+@connect((store) => {
+  return store;
+})
 export class Talent extends React.Component {
   constructor (props) {
     super(props);
+
     console.log(props);
     this.state = {
       windowWidth: window.innerWidth,
@@ -273,48 +279,24 @@ export class Talent extends React.Component {
     );
   }
 }
-//render(<Profile/>, document.getElementById('main'));
 
+// render(<Profile/>, document.getElementById('main'));
+@connect((store) => {
+  return store;
+})
 export class Talents extends React.Component {
   render() {
-    let talentsArray = [];
-    for (let key in this.state.talents) {
-      talentsArray.push({
-        id: key,
-        value: this.state.talents[key]
-      });
-    }
-    let talents = talentsArray.map(talent => (
-      <li key={talent.id}><Link to={`/talents/${talent.id}`}>{talent.value.fname}</Link></li>
+    let talents = this.props.talents.talents.map(talent => (
+      <li key={talent.id}><Link to={`/talents/${talent.id}`}>{talent.fname}</Link></li>
     ));
     return (
       <div>
         <h1>Talents</h1>
         {talents}
-        <Link to="talents/adbe/">abde</Link>
       </div>
     );
   }
   componentWillMount () {
-    let me = this;
-    let talentRef = firebase.database().ref('talents');
-    talentRef.once('value').then((snapshot) => {
-      me.setState({
-        ...me.state,
-        talents: me.state.talents.concat.apply(snapshot.val())
-      });
-    });
-    talentRef.on('child_added', (snapshot) => {
-      me.setState({
-        ...me.state,
-        talents: me.state.talents.concat(snapshot.val())
-      });
-    });
-  }
-  constructor(props) {
-    super(props);
-    this.state = {
-      talents: []
-    };
+    this.props.dispatch(talentActions.subscribeTalents());
   }
 }
